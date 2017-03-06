@@ -13,16 +13,12 @@ public class GeneticSATSolver {
 	private HashMap<Integer, TruthAssignment> population;
 	private TruthAssignment solution;
 	private int[] variables;
-	
-	private List<Integer> elites;
 			
 	private long elapsedTime;
 	
 	
 	public GeneticSATSolver (String filename, String directory) {
 		this.formula = new Formula(filename, directory);
-		
-		this.elites = new ArrayList<Integer>(2);
 		
 		this.population = new HashMap<Integer, TruthAssignment>();
 		int numVars = formula.getNumVars();
@@ -49,6 +45,34 @@ public class GeneticSATSolver {
 			
 			assignmentPerformance.put(i, performance);
 		}
+		
+		int bestIndex1 = -1, bestIndex2 = -1;
+		int bestPerf1 = -1, bestPerf2 = -1;
+		
+		//get the best two and save their indexes for later
+		for (int i : assignmentPerformance.keySet()) {
+			int perf = assignmentPerformance.get(i);
+			
+			if (perf >= bestPerf1) {
+				bestIndex2 = bestIndex1;
+				bestPerf2 = bestPerf1;
+				
+				bestIndex1 = i;
+				bestPerf1 = perf;
+			} else if (perf > bestPerf2) {
+				bestIndex2 = i;
+				bestPerf2 = perf;
+			}
+		}
+		
+		HashMap<Integer, TruthAssignment> newPop = new HashMap<Integer, TruthAssignment>();
+		
+		newPop.put(bestIndex1, population.remove(bestIndex1));
+		newPop.put(bestIndex2, population.remove(bestIndex2));
+		
+		
+		
+		
 		
 		
 
