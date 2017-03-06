@@ -17,11 +17,13 @@ public class Formula {
 	private int numVars;
 	private int numClauses;
 	
+	private int trueClauses;
+	
 	private List<Clause> clauses;
 	
-	private TruthAssignment assignments;
-	
 	public Formula(String filename, String directory) {
+		
+		this.trueClauses = 0;
 		this.filename = filename;
 		this.directory = directory;
 		
@@ -53,8 +55,6 @@ public class Formula {
 					for (int i = 0; i < numVars; i++)
 						vars[i] = i + 1;
 					
-					assignments = new TruthAssignment(vars, true);
-					
 					clauses = new ArrayList<Clause>(numClauses);
 					
 					continue;
@@ -77,7 +77,10 @@ public class Formula {
 		}
 	}
 	
-	public boolean evaluate() {		
+	public boolean evaluate(TruthAssignment assignments) {		
+		
+		boolean result = true;
+		trueClauses = 0;
 		for (Clause c : clauses) {
 			int[] vars = c.getVars();
 			boolean[] assigns = new boolean[vars.length];
@@ -85,11 +88,16 @@ public class Formula {
 				assigns[i] = assignments.getAssignment(vars[i]);
 			}
 			
-			if (!c.evaluate(assigns))
-				return false;
+			result = result && c.evaluate(assigns);
+			if (c.evaluate(assigns))
+				trueClauses++;
 		}
 		
-		return true;
+		return result;
+	}
+	
+	public int getNumTrueClauses() {
+		return trueClauses;
 	}
 	
 	@Override
@@ -99,5 +107,9 @@ public class Formula {
 			result += " and " + clauses.get(i);
 		
 		return result;
+	}
+	
+	public int getNumVars() {
+		return numVars;
 	}
 }
