@@ -83,9 +83,10 @@ public class Formula {
 		trueClauses = 0;
 		for (Clause c : clauses) {
 			int[] vars = c.getVars();
+//			System.out.println(vars[0] + " " + vars[1] + " " + vars[2]);
 			boolean[] assigns = new boolean[vars.length];
 			for (int i = 0; i < assigns.length; i++) {
-				assigns[i] = assignments.getAssignment(vars[i]);
+				assigns[i] = assignments.getAssignment(Math.abs(vars[i]));
 			}
 			
 			result = result && c.evaluate(assigns);

@@ -47,6 +47,7 @@ public class TruthAssignment {
 	}
 
 	public boolean getAssignment(int var) {
+//		System.out.println(var);
 		return variableAssignments.get(var);
 	}
 	
@@ -76,7 +77,10 @@ public class TruthAssignment {
 		
 	}
 	
-	public void controlledFlip(Formula f) {
+	public long controlledFlip(Formula f) {
+		
+		long numbitflips = 0;
+		
 		boolean res = f.evaluate(this);
 		
 		int threshold = f.getNumTrueClauses();
@@ -91,11 +95,13 @@ public class TruthAssignment {
 			
 			if (f.getNumTrueClauses() >= threshold) {
 				threshold = f.getNumTrueClauses();
+				numbitflips++;
 				continue;
 			} else {
 				variableAssignments.replace(i, temp);
 			}
 		}
+		return numbitflips;
 	}
 	
 	public HashMap<Integer, Boolean> getAssignments() {

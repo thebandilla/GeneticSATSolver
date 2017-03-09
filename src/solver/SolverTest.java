@@ -9,11 +9,11 @@ public class SolverTest {
 	private static GeneticSATSolver solver;
 	
 	public static void main (String[] args) {
-		solver = new GeneticSATSolver("uf20-01.cnf", "uf20-91");
-		HashMap<Integer, TruthAssignment> test = solver.getPopulation();
+		solver = new GeneticSATSolver("uf100-01.cnf", "uf100-430");
+		TruthAssignment test = solver.solve();
 		
-		for (int i : test.keySet()) {
-			System.out.println(test.get(i));
-		}
+		long time = solver.getElapsedTime();
+		
+		System.out.println(time + " ms\n" + test);
 	}
 }
